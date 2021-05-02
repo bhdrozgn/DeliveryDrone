@@ -131,9 +131,9 @@ params = dict()
 params["model_folder"] = "Resources/models/"
 params["net_resolution"] = "-1x192"
 #params["model_pose"] = "COCO"
-## Çıkan json dosyasında x0,y0,c0,x1,y1,c1,... şeklinde tutuluyor 18 + 18 + 18
+## JSON file coordinates -> x0,y0,c0,x1,y1,c1,...
 #params["write_json"] = "Output"
-## [0,1] arasına normalize ediyoruz, (0,0) sol üst, (1,1) sağ alt
+## Normalize between [0,1]
 #params["keypoint_scale"] = 3
 # Add others in path?
 
@@ -334,65 +334,4 @@ while dist_from_floor > 50:
 stop()
 
 #--------------------------------------------------------------
-#--------------------------------------------------------------
-
-#cam = cv2.VideoCapture(1)
-#for i in range(1000):
-#	# Process Image
-#	datum = op.Datum()
-#	s, im = cam.read() # captures image
-#	image1 = im
-#	c+=1
-#	if c==8:
-#		c=0
-#		datum.cvInputData = image1
-#		opWrapper.emplaceAndPop(op.VectorDatum([datum]))     # OpenPose being applied to the frame image.
-#		# Display Image
-#		#print("Body keypoints: \n" + str(datum.poseKeypoints))
-#		#print(datum.poseKeypoints.shape)
-#		#arr = np.array([datum.poseKeypoints])
-#		detectedperson = 0
-
-#		try:
-#			if len(datum.poseKeypoints.shape)>=2:
-#				start = time.time()
-#				x1=0
-#				x2=0
-#				for j in range(len(datum.poseKeypoints)):
-#					x1=0
-#					x2=0
-#					s=0
-#					s1=0
-#					ang1 = get_angle(datum.poseKeypoints[j][3], datum.poseKeypoints[j][4])			# right elbow to right wrist
-#					ang2 = get_angle(datum.poseKeypoints[j][6], datum.poseKeypoints[j][7])			# left elbow to left wrist
-#					ang3 = get_angle(datum.poseKeypoints[j][2], datum.poseKeypoints[j][3])			# right arm to right elbow
-#					ang4 = get_angle(datum.poseKeypoints[j][5], datum.poseKeypoints[j][6])			# left arm to left elbow
-#					if ((30 < ang1 < 150) and (90 < ang3 < 180)):
-#						x1 = 1
-#					if ((30 < ang2 < 150) and (0 < ang4 < 90)):
-#						x2 = 1
-#					x3 = x1+x2
-#					if (x3 == 1):
-#						print("The {} person is WAWING !".format(j+1))
-#						detectedperson = j
-#						found_flag = j
-#					else: 
-#						print("The {} person is NOT WAWING !".format(j+1))
-#						found_flag = 0
-#					try:
-#						trackObject(image1, datum, detectedperson)
-#					except:
-#						print("exception")
-#				print("___________________________")
-#				print("      ")
-#				end = time.time()
-#				print("Step time: " + str(end - start) + " seconds")
-#				im=cv2.resize(datum.cvOutputData,(864,540), interpolation = cv2.INTER_AREA)
-#				cv2.imshow("Camera", im)
-#				cv2.waitKey(1)
-#		except:
-#			#im=cv2.resize(im, (864,540), interpolation = cv2.INTER_AREA)
-#			#cv2.imshow("Camera", im)
-#			print("NO HUMAN detected")
-
 		
