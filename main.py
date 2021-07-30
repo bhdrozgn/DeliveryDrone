@@ -100,22 +100,10 @@ def trackObject(im, datum, detectedperson):
 #--------------------------------------------------------------
 
 # Import Openpose (Windows/Ubuntu/OSX)
-dir_path = "C:/openpose/build_windows/examples/tutorial_api_python"
+dir_path = "/usr/local/build/projects/drone"
 try:
-    # Windows Import
-    if platform == "win32":
-        # Change these variables to point to the correct folder (Release/x64 etc.)
-        sys.path.append(dir_path + '/../../python/openpose/Release');
-        #os.environ['PATH'] = os.environ['PATH'] + ';' + dir_path + '/../../x64/Release;' +  dir_path + '/../../bin;'
-        os.add_dll_directory(dir_path + '/../../x64/Release')
-        os.add_dll_directory(dir_path + '/../../bin')
-        import pyopenpose as op
-    else:
-        # Change these variables to point to the correct folder (Release/x64 etc.)
-        sys.path.append('../../python');
-        # If you run `make install` (default path is `/usr/local/python` for Ubuntu), you can also access the OpenPose/python module from there. This will install OpenPose and the python library at your desired installation path. Ensure that this is in your python path in order to use it.
-        # sys.path.append('/usr/local/python')
-        from openpose import pyopenpose as op
+    sys.path.append('../../python');
+    from openpose import pyopenpose as op
 except ImportError as e:
     print('Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
     raise e
@@ -130,12 +118,6 @@ args = parser.parse_known_args()
 params = dict()
 params["model_folder"] = "Resources/models/"
 params["net_resolution"] = "-1x192"
-#params["model_pose"] = "COCO"
-## JSON file coordinates -> x0,y0,c0,x1,y1,c1,...
-#params["write_json"] = "Output"
-## Normalize between [0,1]
-#params["keypoint_scale"] = 3
-# Add others in path?
 
 for i in range(0, len(args[1])):
     curr_item = args[1][i]
@@ -147,10 +129,6 @@ for i in range(0, len(args[1])):
     elif "--" in curr_item and "--" not in next_item:
         key = curr_item.replace('-','')
         if key not in params: params[key] = next_item
-
-# Construct it from system arguments
-# op.init_argv(args[1])
-# oppython = op.OpenposePython()
 
 c=0
 # Starting OpenPose
@@ -230,10 +208,6 @@ while customer_found != true and deg <= 720:
 			c=0
 			datum.cvInputData = image1
 			opWrapper.emplaceAndPop(op.VectorDatum([datum]))     # OpenPose being applied to the frame image.
-			# Display Image
-			#print("Body keypoints: \n" + str(datum.poseKeypoints))
-			#print(datum.poseKeypoints.shape)
-			#arr = np.array([datum.poseKeypoints])
 			detectedperson = 0
 			found_flag = 0
 
@@ -247,10 +221,15 @@ while customer_found != true and deg <= 720:
 						x2=0
 						s=0
 						s1=0
-						ang1 = get_angle(datum.poseKeypoints[j][3], datum.poseKeypoints[j][4])			# right elbow to right wrist
-						ang2 = get_angle(datum.poseKeypoints[j][6], datum.poseKeypoints[j][7])			# left elbow to left wrist
-						ang3 = get_angle(datum.poseKeypoints[j][2], datum.poseKeypoints[j][3])			# right arm to right elbow
-						ang4 = get_angle(datum.poseKeypoints[j][5], datum.poseKeypoints[j][6])			# left arm to left elbow
+						# right elbow to right wrist
+						ang1 = get_angle(datum.poseKeypoints[j][3], datum.poseKeypoints[j][4])
+						# left elbow to left wrist
+						ang2 = get_angle(datum.poseKeypoints[j][6], datum.poseKeypoints[j][7])
+						# right arm to right elbow
+						ang3 = get_angle(datum.poseKeypoints[j][2], datum.poseKeypoints[j][3])
+						# left arm to left elbow
+						ang4 = get_angle(datum.poseKeypoints[j][5], datum.poseKeypoints[j][6])
+
 						if ((30 < ang1 < 150) and (90 < ang3 < 180)):
 							x1 = 1
 						if ((30 < ang2 < 150) and (0 < ang4 < 90)):
@@ -318,7 +297,6 @@ for next_lat, next_long in route_coords:
 			right()
 		elif next_lat < curr_lat:
 			left()
-		
 		if next_long > curr_long:
 			forward()
 		elif next_long < curr_long:
@@ -332,6 +310,3 @@ while dist_from_floor > 50:
 	dist_from_floor = distance_from_floor()
 		
 stop()
-
-#--------------------------------------------------------------
-		
